@@ -17,7 +17,4 @@ struct StudentInformation: Codable{
     let mediaURL:String
     let latitude:Double
     let longitude:Double
-    let createdAt:String
-    let updatedAt:String
-    let ACL:String
 }
