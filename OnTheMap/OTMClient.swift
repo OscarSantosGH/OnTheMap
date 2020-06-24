@@ -10,6 +10,11 @@ import Foundation
 
 class OTMClient {
     
+    struct Auth {
+        static var accountKey = ""
+        static var sessionId = ""
+    }
+    
     enum Endpoints{
         static let base = "https://onthemap-api.udacity.com/v1"
         

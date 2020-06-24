@@ -26,7 +26,8 @@ class LoginViewController: UIViewController {
     @IBAction func login(_ sender: Any) {
         OTMClient.login(username: emailTextField.text!, password: passwordTextField.text!) { (response, error) in
             guard let response = response else {return}
-            print(response)
+            OTMClient.Auth.accountKey = response.account.key
+            OTMClient.Auth.sessionId = response.session.id
         }
     }
     
