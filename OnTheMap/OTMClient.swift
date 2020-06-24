@@ -14,12 +14,14 @@ class OTMClient {
         static let base = "https://onthemap-api.udacity.com/v1"
         
         case getStudents
+        case login
         
         var stringValue: String{
             switch self {
             case .getStudents:
                 return Endpoints.base + "/StudentLocation?limit=100"
-            
+            case .login:
+                return Endpoints.base + "/session"
             }
         }
         
@@ -52,6 +54,38 @@ class OTMClient {
             }
         }
         task.resume()
+    }
+    
+    class func login(username:String, password:String, completion: @escaping (SessionResponse?,Error?) -> Void){
+        var request = URLRequest(url: Endpoints.login.url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let requestBody = LoginRequest(username: username, password: password)
+        request.httpBody = requestBody.requestBody
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if error != nil{
+                completion(nil, error)
+            }
+            guard let data = data else{return}
+            let range = Range(NSRange(5..<data.count))
+            let newData = data.subdata(in: range!) /* subset response data! */
+            
+            let decoder = JSONDecoder()
+            
+            do{
+                let responseObject = try decoder.decode(SessionResponse.self, from: newData)
+                completion(responseObject, nil)
+            }catch{
+                completion(nil, error)
+            }
+            
+            
+        }
+        
+        task.resume()
+        
     }
     
 }
