@@ -28,17 +28,10 @@ class LoginViewController: UIViewController {
             guard let response = response else {return}
             OTMClient.Auth.accountKey = response.account.key
             OTMClient.Auth.sessionId = response.session.id
+            
+            self.performSegue(withIdentifier: "mapSegue", sender: nil)
         }
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

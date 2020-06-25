@@ -81,7 +81,9 @@ class OTMClient {
             
             do{
                 let responseObject = try decoder.decode(SessionResponse.self, from: newData)
-                completion(responseObject, nil)
+                DispatchQueue.main.async {
+                    completion(responseObject, nil)
+                }
             }catch{
                 completion(nil, error)
             }

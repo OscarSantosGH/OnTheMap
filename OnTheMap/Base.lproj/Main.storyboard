@@ -136,7 +136,7 @@
         <!--On The Map-->
         <scene sceneID="LeB-oG-Tq8">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="nnR-FC-bjt" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="nnR-FC-bjt" customClass="MapViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Vwz-4P-nHr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -155,6 +155,9 @@
                         <viewLayoutGuide key="safeArea" id="bJ0-08-rW3"/>
                     </view>
                     <navigationItem key="navigationItem" title="On The Map" id="uvL-hl-tuC"/>
+                    <connections>
+                        <outlet property="mapView" destination="dCr-QG-uRH" id="5Dw-Fx-scX"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="edX-MZ-95L" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
