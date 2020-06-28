@@ -31,6 +31,8 @@ class MapViewController: UIViewController {
                 guard let students = response else {return}
                 self.students = students
                 self.mapAnnotationConfig()
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.students = students
             }
         }
     }
@@ -74,6 +76,8 @@ class MapViewController: UIViewController {
     */
 
 }
+
+// MARK: - MKMapViewDelegate
 
 extension MapViewController: MKMapViewDelegate{
     // Here we create a view with a "right callout accessory view". You might choose to look into other
