@@ -20,18 +20,37 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
     }
     
     
-    @IBAction func login(_ sender: Any) {
+    @IBAction func loginButtonPressed(_ sender: Any) {
+        login()
+    }
+    
+    func login(){
         OTMClient.login(username: emailTextField.text!, password: passwordTextField.text!) { (response, error) in
-            guard let response = response else {return}
+            guard let response = response else {
+                return
+            }
             OTMClient.Auth.accountKey = response.account.key
             OTMClient.Auth.sessionId = response.session.id
-            
             self.performSegue(withIdentifier: "mapSegue", sender: nil)
         }
     }
     
 
+}
+
+
+extension LoginViewController: UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.tag == 0 {
+            passwordTextField.becomeFirstResponder()
+        }else{
+            login()
+        }
+        return true
+    }
 }
