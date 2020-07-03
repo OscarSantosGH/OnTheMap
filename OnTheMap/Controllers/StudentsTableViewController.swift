@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class StudentsTableViewController: UIViewController {
     
@@ -56,7 +57,15 @@ extension StudentsTableViewController: UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let student = students[indexPath.row]
         guard let url = URL(string: student.mediaURL) else {return}
-        UIApplication.shared.open(url)
+        
+        if UIApplication.shared.canOpenURL(url){
+            let safariViewController = SFSafariViewController(url: url)
+            self.present(safariViewController, animated: true)
+        }else{
+            //TODO: - Handle error
+        }
+        
+        
     }
     
     
