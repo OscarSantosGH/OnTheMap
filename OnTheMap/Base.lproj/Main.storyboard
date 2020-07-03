@@ -187,7 +187,25 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bJ0-08-rW3"/>
                     </view>
-                    <navigationItem key="navigationItem" title="On The Map" id="uvL-hl-tuC"/>
+                    <navigationItem key="navigationItem" title="On The Map" id="uvL-hl-tuC">
+                        <barButtonItem key="leftBarButtonItem" title="LOGOUT" id="8eR-Fd-OOf">
+                            <connections>
+                                <action selector="logout:" destination="nnR-FC-bjt" id="msa-u6-UCR"/>
+                            </connections>
+                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="Vr4-c7-wcK">
+                                <connections>
+                                    <action selector="addLocation:" destination="nnR-FC-bjt" id="T7h-rW-TD7"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="refresh" id="k57-ja-R7a">
+                                <connections>
+                                    <action selector="refreshMap:" destination="nnR-FC-bjt" id="asn-NL-q1c"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="dCr-QG-uRH" id="5Dw-Fx-scX"/>
                     </connections>

@@ -36,10 +36,15 @@ class LoginViewController: UIViewController {
             return
         }
         
-        OTMClient.login(username: emailTextField.text!, password: passwordTextField.text!) { [weak self] (response, error) in
+        OTMClient.login(username: emailText, password: passwordText) { [weak self] (response, error) in
             guard let self = self else {return}
             guard let response = response else {
-                self.presentOTMAlert(title: "Something went wrong", message: error!.localizedDescription)
+                if let otmError = error as? OTMError{
+                    self.presentOTMAlert(title: "Invalid credentials", message: otmError.error)
+                }else{
+                    self.presentOTMAlert(title: "Something went wrong", message: error!.localizedDescription)
+                }
+                
                 return
             }
             OTMClient.Auth.accountKey = response.account.key

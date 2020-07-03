@@ -76,7 +76,7 @@ class OTMClient {
             guard let data = data else{return}
             let range = Range(NSRange(5..<data.count))
             let newData = data.subdata(in: range!) /* subset response data! */
-            
+            print(String(data: newData, encoding: .utf8)!)
             let decoder = JSONDecoder()
             
             do{
@@ -85,7 +85,14 @@ class OTMClient {
                     completion(responseObject, nil)
                 }
             }catch{
-                completion(nil, error)
+                do{
+                    let responseObject = try decoder.decode(OTMError.self, from: newData)
+                    DispatchQueue.main.async {
+                        completion(nil, responseObject)
+                    }
+                }catch{
+                    completion(nil, error)
+                }
             }
             
             

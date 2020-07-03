@@ -30,9 +30,11 @@ class MapViewController: UIViewController {
                 
             }else{
                 guard let students = response else {return}
+                self.students = []
                 self.students = students
                 self.mapAnnotationConfig()
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.students = []
                 appDelegate.students = students
             }
         }
@@ -62,7 +64,20 @@ class MapViewController: UIViewController {
         self.mapView.addAnnotations(annotations)
     }
     
-
+    // MARK: - IBActions
+    
+    @IBAction func refreshMap(_ sender: Any) {
+        getStudentsInfo()
+    }
+    
+    @IBAction func addLocation(_ sender: Any) {
+        
+    }
+    
+    @IBAction func logout(_ sender: Any) {
+        
+    }
+    
     /*
     // MARK: - Navigation
 
