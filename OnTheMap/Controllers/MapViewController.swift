@@ -12,8 +12,8 @@ import SafariServices
 
 class MapViewController: UIViewController {
     
-    
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var reloadButton: UIBarButtonItem!
     
     var students:[StudentInformation] = []
 
@@ -24,10 +24,15 @@ class MapViewController: UIViewController {
     }
     
     func getStudentsInfo(){
+        let loadingView = LoadingView(in: view)
+        view.addSubview(loadingView)
+        reloadButton.isEnabled = false
         OTMClient.getStudents { [weak self] (response, error) in
             guard let self = self else {return}
+            self.reloadButton.isEnabled = true
+            loadingView.removeFromSuperview()
             if error != nil{
-                
+                self.presentOTMAlert(title: "Something went wrong", message: error!.localizedDescription)
             }else{
                 guard let students = response else {return}
                 self.students = []

@@ -208,6 +208,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="mapView" destination="dCr-QG-uRH" id="5Dw-Fx-scX"/>
+                        <outlet property="reloadButton" destination="k57-ja-R7a" id="Wdc-QH-gHd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="edX-MZ-95L" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
