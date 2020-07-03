@@ -57,7 +57,6 @@ extension StudentsTableViewController: UITableViewDataSource, UITableViewDelegat
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let student = students[indexPath.row]
         guard let url = URL(string: student.mediaURL) else {
-            print("No Subtitle")
             return
         }
         

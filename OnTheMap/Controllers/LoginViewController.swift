@@ -30,14 +30,24 @@ class LoginViewController: UIViewController {
     }
     
     func login(){
-        OTMClient.login(username: emailTextField.text!, password: passwordTextField.text!) { (response, error) in
+        guard let emailText = emailTextField.text, !emailText.isEmpty,
+            let passwordText = passwordTextField.text, !passwordText.isEmpty else {
+            presentOTMAlert(title: "Email and Password required", message: "Please enter a valid Email and Password")
+            return
+        }
+        
+        OTMClient.login(username: emailTextField.text!, password: passwordTextField.text!) { [weak self] (response, error) in
+            guard let self = self else {return}
             guard let response = response else {
+                self.presentOTMAlert(title: "Something went wrong", message: error!.localizedDescription)
                 return
             }
             OTMClient.Auth.accountKey = response.account.key
             OTMClient.Auth.sessionId = response.session.id
             self.performSegue(withIdentifier: "mapSegue", sender: nil)
         }
+        
+        
     }
     
 

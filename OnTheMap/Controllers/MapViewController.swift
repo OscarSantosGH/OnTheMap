@@ -109,7 +109,6 @@ extension MapViewController: MKMapViewDelegate{
             return
         }
         guard let url = URL(string: student.subtitle!) else {
-            print("No Subtitle")
             return
         }
         
