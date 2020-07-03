@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class LoginViewController: UIViewController {
     
@@ -27,6 +28,11 @@ class LoginViewController: UIViewController {
     
     @IBAction func loginButtonPressed(_ sender: Any) {
         login()
+    }
+    
+    @IBAction func signUpButtonPressed(_ sender: Any) {
+        let safariViewController = SFSafariViewController(url: OTMClient.Endpoints.signUp.url)
+        self.present(safariViewController, animated: true)
     }
     
     func login(){

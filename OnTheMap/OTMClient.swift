@@ -20,6 +20,7 @@ class OTMClient {
         
         case getStudents
         case login
+        case signUp
         
         var stringValue: String{
             switch self {
@@ -27,7 +28,10 @@ class OTMClient {
                 return Endpoints.base + "/StudentLocation?limit=100"
             case .login:
                 return Endpoints.base + "/session"
+            case .signUp:
+                return "https://auth.udacity.com/sign-up"
             }
+            
         }
         
         var url: URL {

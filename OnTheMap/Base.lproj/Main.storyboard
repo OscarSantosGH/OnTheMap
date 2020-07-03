@@ -70,6 +70,9 @@
                                 <state key="normal" title="Sign Up">
                                     <color key="titleColor" red="0.0014013395409999999" green="0.73169440029999999" blue="0.90463954209999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="signUpButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="npX-M2-Z2J"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
