@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import SafariServices
 
 class MapViewController: UIViewController {
     
@@ -18,7 +19,7 @@ class MapViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        mapView.delegate = self
         getStudentsInfo()
     }
     
@@ -40,7 +41,7 @@ class MapViewController: UIViewController {
     func mapAnnotationConfig(){
         // We will create an MKPointAnnotation for each dictionary in "locations". The
         // point annotations will be stored in this array, and then provided to the map view.
-        var annotations = [MKPointAnnotation]()
+        var annotations = [StudentMapAnnotation]()
         
         // The "locations" array is loaded with the sample data below. We are using the dictionaries
         // to create map annotations. This would be more stylish if the dictionaries were being
@@ -52,10 +53,7 @@ class MapViewController: UIViewController {
             
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
             
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            annotation.title = student.firstName
-            annotation.subtitle = student.mediaURL
+            let annotation = StudentMapAnnotation(title: student.firstName, coordinate: coordinate, subtitle: student.mediaURL)
             
             annotations.append(annotation)
         }
@@ -85,18 +83,19 @@ extension MapViewController: MKMapViewDelegate{
     // method in TableViewDataSource.
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
+        guard annotation is StudentMapAnnotation else {return nil}
+        
         let reuseId = "pin"
         
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
 
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.canShowCallout = true
-            pinView!.pinTintColor = .red
-            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            pinView?.canShowCallout = true
+            pinView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         }
         else {
-            pinView!.annotation = annotation
+            pinView?.annotation = annotation
         }
         
         return pinView
@@ -106,11 +105,20 @@ extension MapViewController: MKMapViewDelegate{
     // This delegate method is implemented to respond to taps. It opens the system browser
     // to the URL specified in the annotationViews subtitle property.
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        if control == view.rightCalloutAccessoryView {
-            let app = UIApplication.shared
-            if let toOpen = view.annotation?.subtitle! {
-                app.open(URL(string: toOpen)!)
-            }
+        guard let student = view.annotation as? StudentMapAnnotation else {
+            return
         }
+        guard let url = URL(string: student.subtitle!) else {
+            print("No Subtitle")
+            return
+        }
+        
+        if UIApplication.shared.canOpenURL(url){
+            let safariViewController = SFSafariViewController(url: url)
+            self.present(safariViewController, animated: true)
+        }else{
+            //TODO: - Handle error
+        }
+
     }
 }
