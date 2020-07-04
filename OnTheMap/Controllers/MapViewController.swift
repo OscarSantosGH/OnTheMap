@@ -76,7 +76,7 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func addLocation(_ sender: Any) {
-        
+        performSegue(withIdentifier: "toAddLocation", sender: self)
     }
     
     @IBAction func logout(_ sender: Any) {
