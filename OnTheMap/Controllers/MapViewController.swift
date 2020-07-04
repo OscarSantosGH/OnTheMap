@@ -80,7 +80,18 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func logout(_ sender: Any) {
-        
+        let loadingView = LoadingView(in: view)
+        view.addSubview(loadingView)
+        OTMClient.logout { [weak self] (success, error) in
+            guard let self = self else {return}
+            loadingView.removeFromSuperview()
+            if success{
+                self.performSegue(withIdentifier: "unwindToLoginViewController", sender: self)
+            }else{
+                self.presentOTMAlert(title: "Something went wrong", message: error!.localizedDescription)
+            }
+            
+        }
     }
     
     /*

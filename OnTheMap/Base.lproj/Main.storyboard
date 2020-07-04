@@ -10,7 +10,7 @@
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="LoginViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Login" id="BYZ-38-t0r" customClass="LoginViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -212,9 +212,11 @@
                     <connections>
                         <outlet property="mapView" destination="dCr-QG-uRH" id="5Dw-Fx-scX"/>
                         <outlet property="reloadButton" destination="k57-ja-R7a" id="Wdc-QH-gHd"/>
+                        <segue destination="bDy-CI-x82" kind="unwind" identifier="unwindToLoginViewController" unwindAction="prepareForUnwindWithSegue:" id="ncN-JS-BrU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="edX-MZ-95L" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="bDy-CI-x82" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3055.1999999999998" y="-188.42364532019704"/>
         </scene>

@@ -106,4 +106,35 @@ class OTMClient {
         
     }
     
+    class func logout(completion: @escaping (Bool, Error?) -> Void){
+        var request = URLRequest(url: Endpoints.login.url)
+        request.httpMethod = "DELETE"
+        var xsrfCookie: HTTPCookie? = nil
+        let sharedCookieStorage = HTTPCookieStorage.shared
+        for cookie in sharedCookieStorage.cookies! {
+          if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+        if let xsrfCookie = xsrfCookie {
+          request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+          if error != nil { // Handle error…
+            completion(false, error!)
+              return
+          }
+          guard let data = data else{return}
+          let range = Range(NSRange(5..<data.count))
+          let newData = data.subdata(in: range!) /* subset response data! */
+          print(String(data: newData, encoding: .utf8)!)
+            Auth.accountKey = ""
+            Auth.sessionId = ""
+            DispatchQueue.main.async {
+                completion(true, nil)
+            }
+            
+        }
+        task.resume()
+    }
+    
 }
