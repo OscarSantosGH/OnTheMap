@@ -25,7 +25,7 @@ class OTMClient {
         var stringValue: String{
             switch self {
             case .getStudents:
-                return Endpoints.base + "/StudentLocation?limit=100"
+                return Endpoints.base + "/StudentLocation?limit=100&-updatedAt"
             case .login:
                 return Endpoints.base + "/session"
             case .signUp:
