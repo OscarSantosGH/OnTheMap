@@ -352,17 +352,17 @@
                         <outlet property="findLocationButton" destination="sVw-al-WR2" id="XBY-pC-v1c"/>
                         <outlet property="linkTextField" destination="e9T-Gw-WKI" id="CMG-zo-OaZ"/>
                         <outlet property="locationTextField" destination="Y38-PM-mbH" id="OGe-o8-Vol"/>
-                        <segue destination="8fS-Z2-ity" kind="show" identifier="toFinishLocation" id="fHA-gs-G4t"/>
+                        <segue destination="8fS-Z2-ity" kind="show" identifier="toSummitLocation" id="fHA-gs-G4t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sOW-pL-ckQ" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5268" y="173.64532019704436"/>
         </scene>
-        <!--Confirm Location-->
+        <!--Summit Location-->
         <scene sceneID="oNf-Gd-1sO">
             <objects>
-                <viewController hidesBottomBarWhenPushed="YES" id="8fS-Z2-ity" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="8fS-Z2-ity" customClass="SummitLocationViewController" customModule="OnTheMap" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4qA-oQ-Bk2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="758"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -377,7 +377,7 @@
                                     <constraint firstAttribute="height" constant="50" id="XJV-Rx-N8O"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="FINISH">
+                                <state key="normal" title="Summit">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                             </button>
@@ -394,7 +394,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="g2Z-vU-I5B"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Confirm Location" id="FXG-sP-or8"/>
+                    <navigationItem key="navigationItem" title="Summit Location" id="FXG-sP-or8"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xpo-Jv-5eg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

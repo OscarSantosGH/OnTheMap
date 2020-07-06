@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 class AddLocationViewController: UIViewController {
     
@@ -14,11 +15,13 @@ class AddLocationViewController: UIViewController {
     @IBOutlet weak var linkTextField: UITextField!
     @IBOutlet weak var findLocationButton: UIButton!
     
-
+    let geoCoder = CLGeocoder()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
     }
     
     @IBAction func cancelAction(_ sender: Any) {
@@ -27,16 +30,43 @@ class AddLocationViewController: UIViewController {
     
     
     @IBAction func findLocationAction(_ sender: Any) {
+        guard let locationTxt = locationTextField.text, !locationTxt.isEmpty,
+              let linkTxt = linkTextField.text, !linkTxt.isEmpty else {
+            return
+        }
+        geoCoder.geocodeAddressString(locationTxt) { [weak self] (placemarks, error) in
+            guard let self = self else {return}
+            if error != nil{
+                print("Error: \(error!.localizedDescription)")
+            }else{
+                guard let placemark = placemarks?.first,
+                    let coordinate = placemark.location?.coordinate else {
+                    return
+                }
+                let myKey = OTMClient.Auth.accountKey
+                let myInfo = StudentInfoPost(uniqueKey: myKey, mapString: locationTxt, mediaURL: linkTxt, latitude: coordinate.latitude, longitude: coordinate.longitude)
+                
+                let studentLocationInfo = SummitLocationViewController.StudentLocationInfo(placemark: placemark, studentInfo: myInfo)
+                
+                self.performSegue(withIdentifier: "toSummitLocation", sender: studentLocationInfo)
+            }
+        }
     }
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
+        if segue.identifier == "toSummitLocation" {
+            let destinationViewController = segue.destination as! SummitLocationViewController
+            let studentLocationInfo = sender as! SummitLocationViewController.StudentLocationInfo
+            
+            destinationViewController.studentLocationInfo = studentLocationInfo
+        }
         // Pass the selected object to the new view controller.
     }
-    */
+    
 
 }
