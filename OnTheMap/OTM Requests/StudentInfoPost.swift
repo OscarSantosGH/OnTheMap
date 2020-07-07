@@ -20,8 +20,8 @@ struct StudentInfoPost: Codable {
     
     init(uniqueKey:String, mapString:String, mediaURL:String, latitude:Double, longitude:Double) {
         self.uniqueKey = uniqueKey
-        self.firstName = "Cafe"
-        self.lastName = "Con Leche"
+        self.firstName = "Cafe Con Leche"
+        self.lastName = "Expresso"
         self.mapString = mapString
         self.mediaURL = mediaURL
         self.latitude = latitude
