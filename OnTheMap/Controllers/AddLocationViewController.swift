@@ -20,8 +20,6 @@ class AddLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        
     }
     
     @IBAction func cancelAction(_ sender: Any) {
@@ -37,7 +35,7 @@ class AddLocationViewController: UIViewController {
         geoCoder.geocodeAddressString(locationTxt) { [weak self] (placemarks, error) in
             guard let self = self else {return}
             if error != nil{
-                print("Error: \(error!.localizedDescription)")
+                self.presentOTMAlert(title: "Geocode fail", message: error!.localizedDescription)
             }else{
                 guard let placemark = placemarks?.first,
                     let coordinate = placemark.location?.coordinate else {
@@ -62,10 +60,9 @@ class AddLocationViewController: UIViewController {
         if segue.identifier == "toSummitLocation" {
             let destinationViewController = segue.destination as! SummitLocationViewController
             let studentLocationInfo = sender as! StudentLocationInfo
-            
+            // Pass the selected object to the new view controller.
             destinationViewController.studentLocationInfo = studentLocationInfo
         }
-        // Pass the selected object to the new view controller.
     }
     
 

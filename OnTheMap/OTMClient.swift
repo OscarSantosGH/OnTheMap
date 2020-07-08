@@ -86,7 +86,6 @@ class OTMClient {
             guard let data = data else{return}
             let range = Range(NSRange(5..<data.count))
             let newData = data.subdata(in: range!) /* subset response data! */
-            print(String(data: newData, encoding: .utf8)!)
             let decoder = JSONDecoder()
             
             do{
@@ -133,10 +132,6 @@ class OTMClient {
             }
               return
           }
-          guard let data = data else{return}
-          let range = Range(NSRange(5..<data.count))
-          let newData = data.subdata(in: range!) /* subset response data! */
-          print(String(data: newData, encoding: .utf8)!)
             Auth.accountKey = ""
             Auth.sessionId = ""
             DispatchQueue.main.async {
@@ -162,15 +157,15 @@ class OTMClient {
             }
             
             guard let data = data else{
-                
+                DispatchQueue.main.async {
+                    completion(nil, error!)
+                }
                 return
             }
             let decoder = JSONDecoder()
           
             do{
                 let postResponse = try decoder.decode(PostStudentLocationResponse.self, from: data)
-                
-                print(String(data: data, encoding: .utf8)!)
                 DispatchQueue.main.async {
                       completion(postResponse, nil)
                   }
