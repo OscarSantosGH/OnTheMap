@@ -160,12 +160,35 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="WnO-ug-Av7"/>
                     </view>
-                    <navigationItem key="navigationItem" title="On The Map" id="hDI-D4-99N"/>
+                    <navigationItem key="navigationItem" title="On The Map" id="hDI-D4-99N">
+                        <barButtonItem key="leftBarButtonItem" title="LOGOUT" id="J5n-pL-O9o">
+                            <connections>
+                                <action selector="logout:" destination="btU-eg-GnN" id="xuV-K4-IHQ"/>
+                            </connections>
+                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="mappin.and.ellipse" catalog="system" id="F3a-dB-MZE">
+                                <connections>
+                                    <action selector="addLocation:" destination="btU-eg-GnN" id="A77-kt-Fzz"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="arrow.clockwise" catalog="system" id="cbp-hK-DCy">
+                                <connections>
+                                    <action selector="reloadAction:" destination="btU-eg-GnN" id="LCD-mE-Kjl"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
                     <connections>
+                        <outlet property="logoutButton" destination="J5n-pL-O9o" id="d8e-tM-j2Q"/>
+                        <outlet property="reloadButton" destination="cbp-hK-DCy" id="TwX-IE-SGj"/>
                         <outlet property="tableView" destination="ngl-P3-4Nf" id="kBl-hf-2Wt"/>
+                        <segue destination="a22-9F-LSE" kind="presentation" identifier="toAddLocation" id="jfl-LU-LCm"/>
+                        <segue destination="Cgx-jU-Qq2" kind="unwind" identifier="unwindToLoginViewController" unwindAction="prepareForUnwindWithSegue:" id="5j4-MQ-09Y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0GQ-vR-D95" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="Cgx-jU-Qq2" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="3055.1999999999998" y="464.77832512315274"/>
         </scene>
@@ -427,7 +450,11 @@
             <point key="canvasLocation" x="4325.6000000000004" y="173.64532019704436"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="jfl-LU-LCm"/>
+    </inferredMetricsTieBreakers>
     <resources>
+        <image name="arrow.clockwise" catalog="system" width="115" height="128"/>
         <image name="list.dash" catalog="system" width="128" height="85"/>
         <image name="logo" width="868" height="734"/>
         <image name="map" catalog="system" width="128" height="113"/>

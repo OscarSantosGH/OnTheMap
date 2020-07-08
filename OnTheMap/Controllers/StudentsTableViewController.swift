@@ -12,6 +12,8 @@ import SafariServices
 class StudentsTableViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var logoutButton: UIBarButtonItem!
+    @IBOutlet weak var reloadButton: UIBarButtonItem!
     
     var students = [StudentInformation]()
 
@@ -23,9 +25,61 @@ class StudentsTableViewController: UIViewController {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         students = appDelegate.students
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewData), name: NSNotification.Name(rawValue: "ReloadData"), object: nil)
     }
     
-
+    @objc func reloadTableViewData(){
+        tableView.reloadData()
+    }
+    
+    @IBAction func logout(_ sender: Any) {
+        let loadingView = LoadingView(in: view)
+        view.addSubview(loadingView)
+        OTMClient.logout { [weak self] (success, error) in
+            guard let self = self else {return}
+            loadingView.removeFromSuperview()
+            if success{
+                self.performSegue(withIdentifier: "unwindToLoginViewController", sender: self)
+            }else{
+                self.presentOTMAlert(title: "Something went wrong", message: error!.localizedDescription)
+            }
+        }
+    }
+    
+    @IBAction func reloadAction(_ sender: Any) {
+        reloadTableViewData()
+    }
+    
+    @IBAction func addLocation(_ sender: Any) {
+        let objectId = OTMClient.Auth.postedLocationId
+        
+        for student in students{
+            if student.objectId == objectId{
+                overwriteLocation()
+                return
+            }
+        }
+        performSegue(withIdentifier: "toAddLocation", sender: self)
+    }
+    
+    func overwriteLocation(){
+        let alertViewController = UIAlertController(title: "You Have Posted a Student Location", message: "Would You Like To Overwrite Your Current Location?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            alertViewController.dismiss(animated: true)
+        }
+        let overwriteAction = UIAlertAction(title: "Overwrite", style: .default) { (action) in
+            self.performSegue(withIdentifier: "toAddLocation", sender: self)
+        }
+        alertViewController.addAction(overwriteAction)
+        alertViewController.addAction(cancelAction)
+        present(alertViewController, animated: true)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     /*
     // MARK: - Navigation
 

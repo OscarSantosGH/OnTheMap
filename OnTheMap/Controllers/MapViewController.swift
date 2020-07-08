@@ -113,7 +113,6 @@ class MapViewController: UIViewController {
             }else{
                 self.presentOTMAlert(title: "Something went wrong", message: error!.localizedDescription)
             }
-            
         }
     }
     
