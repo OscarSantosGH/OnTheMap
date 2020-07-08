@@ -61,6 +61,7 @@ class SummitLocationViewController: UIViewController {
                 return
             }
             OTMClient.Auth.postedLocationId = response.objectId
+            NotificationCenter.default.post(name: NSNotification.Name("ReloadData"), object: nil)
             self.dismiss(animated: true)
         }
     }

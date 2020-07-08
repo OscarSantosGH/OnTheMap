@@ -21,9 +21,11 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         mapView.delegate = self
         getStudentsInfo()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(getStudentsInfo), name: NSNotification.Name(rawValue: "ReloadData"), object: nil)
     }
     
-    func getStudentsInfo(){
+    @objc func getStudentsInfo(){
         let loadingView = LoadingView(in: view)
         view.addSubview(loadingView)
         reloadButton.isEnabled = false
@@ -84,9 +86,7 @@ class MapViewController: UIViewController {
                 return
             }
         }
-        
         performSegue(withIdentifier: "toAddLocation", sender: self)
-        
     }
     
     func overwriteLocation(){
@@ -115,6 +115,10 @@ class MapViewController: UIViewController {
             }
             
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     /*
