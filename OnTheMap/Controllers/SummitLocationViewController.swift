@@ -45,13 +45,23 @@ class SummitLocationViewController: UIViewController {
     
     @IBAction func summit(_ sender: Any) {
         guard let studentInfo = studentLocationInfo?.studentInfo else {return}
-        OTMClient.postLocation(of: studentInfo) { [weak self] (success, error) in
+        let loadingView = LoadingView(in: view)
+        view.addSubview(loadingView)
+        summitButton.isEnabled = false
+        OTMClient.postLocation(of: studentInfo) { [weak self] (response, error) in
             guard let self = self else {return}
-            if success{
-                self.dismiss(animated: true)
-            }else{
-                print("didn't make it")
+            loadingView.removeFromSuperview()
+            self.summitButton.isEnabled = true
+            guard let response = response else {
+                if let otmError = error as? OTMError{
+                    self.presentOTMAlert(title: "Something went wrong", message: otmError.error)
+                }else{
+                    self.presentOTMAlert(title: "Something went wrong", message: error!.localizedDescription)
+                }
+                return
             }
+            OTMClient.Auth.postedLocationId = response.objectId
+            self.dismiss(animated: true)
         }
     }
     

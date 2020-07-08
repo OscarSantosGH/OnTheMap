@@ -76,10 +76,10 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func addLocation(_ sender: Any) {
-        let accountId = OTMClient.Auth.accountKey
+        let objectId = OTMClient.Auth.postedLocationId
         
         for student in students{
-            if student.uniqueKey == accountId{
+            if student.objectId == objectId{
                 overwriteLocation()
                 return
             }

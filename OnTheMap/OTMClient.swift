@@ -13,6 +13,7 @@ class OTMClient {
     struct Auth {
         static var accountKey = ""
         static var sessionId = ""
+        static var postedLocationId = ""
     }
     
     enum Endpoints{
@@ -146,23 +147,40 @@ class OTMClient {
         task.resume()
     }
     
-    class func postLocation(of student:StudentInfoPost, completion: @escaping (Bool, Error?) -> Void){
+    class func postLocation(of student:StudentInfoPost, completion: @escaping (PostStudentLocationResponse?, Error?) -> Void){
         var request = URLRequest(url: Endpoints.studentLocation.url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = student.requestBody
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-          if error != nil { // Handle error…
-            DispatchQueue.main.async {
-                completion(false, error!)
+            if error != nil { // Handle error…
+              DispatchQueue.main.async {
+                  completion(nil, error!)
+              }
+                return
             }
-              return
-          }
-          print(String(data: data!, encoding: .utf8)!)
-          DispatchQueue.main.async {
-                completion(true, nil)
+            
+            guard let data = data else{
+                
+                return
             }
+            let decoder = JSONDecoder()
+          
+            do{
+                let postResponse = try decoder.decode(PostStudentLocationResponse.self, from: data)
+                
+                print(String(data: data, encoding: .utf8)!)
+                DispatchQueue.main.async {
+                      completion(postResponse, nil)
+                  }
+            }catch{
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
+            }
+            
+          
         }
         task.resume()
     }
