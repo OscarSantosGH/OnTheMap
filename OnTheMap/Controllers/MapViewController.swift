@@ -76,7 +76,30 @@ class MapViewController: UIViewController {
     }
     
     @IBAction func addLocation(_ sender: Any) {
+        let accountId = OTMClient.Auth.accountKey
+        
+        for student in students{
+            if student.uniqueKey == accountId{
+                overwriteLocation()
+                return
+            }
+        }
+        
         performSegue(withIdentifier: "toAddLocation", sender: self)
+        
+    }
+    
+    func overwriteLocation(){
+        let alertViewController = UIAlertController(title: "You Have Posted a Student Location", message: "Would You Like To Overwrite Your Current Location?", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+            alertViewController.dismiss(animated: true)
+        }
+        let overwriteAction = UIAlertAction(title: "Overwrite", style: .default) { (action) in
+            self.performSegue(withIdentifier: "toAddLocation", sender: self)
+        }
+        alertViewController.addAction(overwriteAction)
+        alertViewController.addAction(cancelAction)
+        present(alertViewController, animated: true)
     }
     
     @IBAction func logout(_ sender: Any) {

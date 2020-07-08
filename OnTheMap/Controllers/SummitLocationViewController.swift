@@ -44,7 +44,15 @@ class SummitLocationViewController: UIViewController {
     }
     
     @IBAction func summit(_ sender: Any) {
-        
+        guard let studentInfo = studentLocationInfo?.studentInfo else {return}
+        OTMClient.postLocation(of: studentInfo) { [weak self] (success, error) in
+            guard let self = self else {return}
+            if success{
+                self.dismiss(animated: true)
+            }else{
+                print("didn't make it")
+            }
+        }
     }
     
     /*

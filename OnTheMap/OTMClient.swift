@@ -19,13 +19,16 @@ class OTMClient {
         static let base = "https://onthemap-api.udacity.com/v1"
         
         case getStudents
+        case studentLocation
         case login
         case signUp
         
         var stringValue: String{
             switch self {
             case .getStudents:
-                return Endpoints.base + "/StudentLocation?limit=100&-updatedAt"
+                return Endpoints.base + "/StudentLocation?limit=100&order=-updatedAt"
+            case .studentLocation:
+                return Endpoints.base + "/StudentLocation"
             case .login:
                 return Endpoints.base + "/session"
             case .signUp:
@@ -75,7 +78,9 @@ class OTMClient {
         request.httpBody = requestBody.requestBody
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             if error != nil{
-                completion(nil, error)
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
             }
             guard let data = data else{return}
             let range = Range(NSRange(5..<data.count))
@@ -95,7 +100,9 @@ class OTMClient {
                         completion(nil, responseObject)
                     }
                 }catch{
-                    completion(nil, error)
+                    DispatchQueue.main.async {
+                        completion(nil, error)
+                    }
                 }
             }
             
@@ -120,7 +127,9 @@ class OTMClient {
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
           if error != nil { // Handle error…
-            completion(false, error!)
+            DispatchQueue.main.async {
+                completion(false, error!)
+            }
               return
           }
           guard let data = data else{return}
@@ -133,6 +142,27 @@ class OTMClient {
                 completion(true, nil)
             }
             
+        }
+        task.resume()
+    }
+    
+    class func postLocation(of student:StudentInfoPost, completion: @escaping (Bool, Error?) -> Void){
+        var request = URLRequest(url: Endpoints.studentLocation.url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = student.requestBody
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+          if error != nil { // Handle error…
+            DispatchQueue.main.async {
+                completion(false, error!)
+            }
+              return
+          }
+          print(String(data: data!, encoding: .utf8)!)
+          DispatchQueue.main.async {
+                completion(true, nil)
+            }
         }
         task.resume()
     }
