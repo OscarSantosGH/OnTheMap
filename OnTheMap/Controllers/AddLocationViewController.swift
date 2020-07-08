@@ -46,7 +46,7 @@ class AddLocationViewController: UIViewController {
                 let myKey = OTMClient.Auth.accountKey
                 let myInfo = StudentInfoPost(uniqueKey: myKey, mapString: locationTxt, mediaURL: linkTxt, latitude: coordinate.latitude, longitude: coordinate.longitude)
                 
-                let studentLocationInfo = SummitLocationViewController.StudentLocationInfo(placemark: placemark, studentInfo: myInfo)
+                let studentLocationInfo = StudentLocationInfo(placemark: placemark, studentInfo: myInfo)
                 
                 self.performSegue(withIdentifier: "toSummitLocation", sender: studentLocationInfo)
             }
@@ -61,7 +61,7 @@ class AddLocationViewController: UIViewController {
         // Get the new view controller using segue.destination.
         if segue.identifier == "toSummitLocation" {
             let destinationViewController = segue.destination as! SummitLocationViewController
-            let studentLocationInfo = sender as! SummitLocationViewController.StudentLocationInfo
+            let studentLocationInfo = sender as! StudentLocationInfo
             
             destinationViewController.studentLocationInfo = studentLocationInfo
         }
