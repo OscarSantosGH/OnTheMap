@@ -19,6 +19,8 @@ class AddLocationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationTextField.delegate = self
+        linkTextField.delegate = self
     }
     
     @IBAction func cancelAction(_ sender: Any) {
@@ -28,6 +30,10 @@ class AddLocationViewController: UIViewController {
     
     
     @IBAction func findLocationAction(_ sender: Any) {
+        findLocation()
+    }
+    
+    func findLocation(){
         // check if the location and link textField aren't empty
         guard let locationTxt = locationTextField.text, !locationTxt.isEmpty,
               let linkTxt = linkTextField.text, !linkTxt.isEmpty else {
@@ -74,6 +80,16 @@ class AddLocationViewController: UIViewController {
             destinationViewController.studentLocationInfo = studentLocationInfo
         }
     }
-    
+}
 
+// Enable the user to fill all the textFields just with the keyboard
+extension AddLocationViewController: UITextFieldDelegate{
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.tag == 0 {
+            linkTextField.becomeFirstResponder()
+        }else{
+            findLocation()
+        }
+        return true
+    }
 }
