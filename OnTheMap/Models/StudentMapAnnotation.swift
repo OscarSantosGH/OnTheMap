@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 
+// custom MKAnnotation for the Students Location
 class StudentMapAnnotation: NSObject, MKAnnotation {
     var title: String?
     var coordinate: CLLocationCoordinate2D

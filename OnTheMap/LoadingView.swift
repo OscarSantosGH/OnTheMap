@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+// this is a Custom view to indicate background activity of the app
 class LoadingView: UIView {
     
     let contentView = UIView()

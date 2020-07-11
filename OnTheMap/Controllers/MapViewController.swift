@@ -21,7 +21,7 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         mapView.delegate = self
         getStudentsInfo()
-        
+        // Set an observer that helps to reload the mapView annotations from another viewController
         NotificationCenter.default.addObserver(self, selector: #selector(getStudentsInfo), name: NSNotification.Name(rawValue: "ReloadData"), object: nil)
     }
     
@@ -37,33 +37,33 @@ class MapViewController: UIViewController {
                 self.presentOTMAlert(title: "Something went wrong", message: error!.localizedDescription)
             }else{
                 guard let students = response else {return}
-                self.students = []
+                // check if mapView has annotations
+                if self.mapView.annotations.count != 0{
+                    // remove all the previews annotations of mapView
+                    for annotation in self.mapView.annotations{
+                        self.mapView.removeAnnotation(annotation)
+                    }
+                }
                 self.students = students
                 self.mapAnnotationConfig()
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                appDelegate.students = []
                 appDelegate.students = students
             }
         }
     }
     
     func mapAnnotationConfig(){
-        // We will create an MKPointAnnotation for each dictionary in "locations". The
-        // point annotations will be stored in this array, and then provided to the map view.
+        // We will create an StudentMapAnnotation for each student in students array.
         var annotations = [StudentMapAnnotation]()
         
-        // The "locations" array is loaded with the sample data below. We are using the dictionaries
-        // to create map annotations. This would be more stylish if the dictionaries were being
-        // used to create custom structs. Perhaps StudentLocation structs.
-        
+        // getting all the info necessary to create a StudentMapAnnotation from each student
         for student in students{
             let lat = CLLocationDegrees(student.latitude)
             let long = CLLocationDegrees(student.longitude)
-            
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-            
+            // creating the StudentMapAnnotation
             let annotation = StudentMapAnnotation(title: student.firstName, coordinate: coordinate, subtitle: student.mediaURL)
-            
+            // Adding the StudentMapAnnotation to the array
             annotations.append(annotation)
         }
         
@@ -74,21 +74,26 @@ class MapViewController: UIViewController {
     // MARK: - IBActions
     
     @IBAction func refreshMap(_ sender: Any) {
+        // Get all the updated student locations from the server
         getStudentsInfo()
     }
     
     @IBAction func addLocation(_ sender: Any) {
+        // get the id of the last location that the user post
         let objectId = OTMClient.Auth.postedLocationId
-        
+        // check for the user post in the students array
         for student in students{
+            // if the user post is found the overwriteLocation function will be called
             if student.objectId == objectId{
                 overwriteLocation()
+                // the function will exit after overwriteLocation get called
                 return
             }
         }
+        // if the user doesn't has a location in the map the AddLocationViewController will show up.
         performSegue(withIdentifier: "toAddLocation", sender: self)
     }
-    
+    // If the user had a pin in the map an UIAlertController will appear asking if the user want to overwrite his location.
     func overwriteLocation(){
         let alertViewController = UIAlertController(title: "You Have Posted a Student Location", message: "Would You Like To Overwrite Your Current Location?", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
@@ -101,7 +106,7 @@ class MapViewController: UIViewController {
         alertViewController.addAction(cancelAction)
         present(alertViewController, animated: true)
     }
-    
+    // try to logout from the session
     @IBAction func logout(_ sender: Any) {
         let loadingView = LoadingView(in: view)
         view.addSubview(loadingView)
@@ -109,13 +114,14 @@ class MapViewController: UIViewController {
             guard let self = self else {return}
             loadingView.removeFromSuperview()
             if success{
+                // goto the LoginViewController
                 self.performSegue(withIdentifier: "unwindToLoginViewController", sender: self)
             }else{
                 self.presentOTMAlert(title: "Something went wrong", message: error!.localizedDescription)
             }
         }
     }
-    
+    // remove all the observers when the view is remove from memory
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -125,15 +131,11 @@ class MapViewController: UIViewController {
 // MARK: - MKMapViewDelegate
 
 extension MapViewController: MKMapViewDelegate{
-    // Here we create a view with a "right callout accessory view". You might choose to look into other
-    // decoration alternatives. Notice the similarity between this method and the cellForRowAtIndexPath
-    // method in TableViewDataSource.
+    // create all the MKPinAnnotationView with a rightCalloutAccessoryView
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
         guard annotation is StudentMapAnnotation else {return nil}
         
         let reuseId = "pin"
-        
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
 
         if pinView == nil {
@@ -149,7 +151,7 @@ extension MapViewController: MKMapViewDelegate{
     }
 
     
-    // This delegate method is implemented to respond to taps. It opens the system browser
+    // This delegate method is implemented to respond to taps. It opens the SFSafariViewController
     // to the URL specified in the annotationViews subtitle property.
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         guard let student = view.annotation as? StudentMapAnnotation else {

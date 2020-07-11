@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIViewController{
-    
+    // this is a custom UIAlertController for convenience and readability
     func presentOTMAlert(title:String, message: String){
         DispatchQueue.main.async {
             let alertViewController = UIAlertController(title: title, message: message, preferredStyle: .alert)

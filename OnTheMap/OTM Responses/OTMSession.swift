@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+// this struct is used to create a custom SessionResponse
 struct OTMSession: Codable {
     let id:String
     let expiration:String

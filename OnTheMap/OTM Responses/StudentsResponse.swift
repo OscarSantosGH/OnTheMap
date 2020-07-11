@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+// custom struct of the response of the getStudents request
 struct StudentResponse: Codable {
     let results:[StudentInformation]
 }

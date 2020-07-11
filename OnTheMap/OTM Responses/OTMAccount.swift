@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+// this struct is used to create a custom SessionResponse
 struct OTMAccount: Codable{
     let registered:Bool
     let key:String

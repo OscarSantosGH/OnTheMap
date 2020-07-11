@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+// custom struct of the response of the session request
 struct SessionResponse: Codable {
     let account: OTMAccount
     let session: OTMSession

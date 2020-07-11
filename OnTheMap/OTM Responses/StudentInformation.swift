@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+// this is a custom modal of the json obtain in the getStudents request
 struct StudentInformation: Codable{
     let objectId:String
     let uniqueKey:String
