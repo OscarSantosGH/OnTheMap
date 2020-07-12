@@ -17,11 +17,11 @@ struct StudentInfoPost: Codable {
     let latitude:Double
     let longitude:Double
     let requestBody:Data?
-    // initialize the struct with a hardcoded name and last name for security reason
-    init(uniqueKey:String, mapString:String, mediaURL:String, latitude:Double, longitude:Double) {
+    
+    init(uniqueKey:String, firstName:String, lastName:String, mapString:String, mediaURL:String, latitude:Double, longitude:Double) {
         self.uniqueKey = uniqueKey
-        self.firstName = "Arroz Con Coco"
-        self.lastName = "Frito"
+        self.firstName = firstName
+        self.lastName = lastName
         self.mapString = mapString
         self.mediaURL = mediaURL
         self.latitude = latitude

@@ -23,6 +23,7 @@ class OTMClient {
         case studentLocation
         case login
         case signUp
+        case getUserInfo
         
         var stringValue: String{
             switch self {
@@ -34,6 +35,8 @@ class OTMClient {
                 return Endpoints.base + "/session"
             case .signUp:
                 return "https://auth.udacity.com/sign-up"
+            case .getUserInfo:
+                return Endpoints.base + "/users/" + Auth.accountKey
             }
             
         }
@@ -138,6 +141,41 @@ class OTMClient {
                 completion(true, nil)
             }
             
+        }
+        task.resume()
+    }
+    
+    class func getUserInfo(completion: @escaping (OTMUser?, Error?) -> Void){
+        let request = URLRequest(url: Endpoints.getUserInfo.url)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+          if error != nil { // Handle error...
+            DispatchQueue.main.async {
+                completion(nil, error!)
+            }
+            return
+          }
+            
+            guard let data = data else{
+                DispatchQueue.main.async {
+                    completion(nil, error!)
+                }
+                return
+            }
+            let range = Range(NSRange(5..<data.count))
+            let newData = data.subdata(in: range!) /* subset response data! */
+            let decoder = JSONDecoder()
+            
+            do{
+                let user = try decoder.decode(OTMUser.self, from: newData)
+                DispatchQueue.main.async {
+                    completion(user, nil)
+                }
+            }catch{
+                DispatchQueue.main.async {
+                    completion(nil, error)
+                }
+            }
+          
         }
         task.resume()
     }

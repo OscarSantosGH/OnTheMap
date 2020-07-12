@@ -50,20 +50,36 @@ class AddLocationViewController: UIViewController {
             if error != nil{
                 self.presentOTMAlert(title: "Geocode fail", message: error!.localizedDescription)
             }else{
-                //get the coordinate of the placemark
-                guard let placemark = placemarks?.first,
-                    let coordinate = placemark.location?.coordinate else {
-                    return
-                }
-                // get the accountKey of the session
-                let myKey = OTMClient.Auth.accountKey
-                // create a custom StudentInfoPost that contain all the info necessary to make a POST request to the server
-                let myInfo = StudentInfoPost(uniqueKey: myKey, mapString: locationTxt, mediaURL: linkTxt, latitude: coordinate.latitude, longitude: coordinate.longitude)
-                // create a custom struct that holds the studentInfoPost and the placemark info to create an MKAnnotation
-                let studentLocationInfo = StudentLocationInfo(placemark: placemark, studentInfo: myInfo)
-                
-                self.performSegue(withIdentifier: "toSummitLocation", sender: studentLocationInfo)
+                guard let placemark = placemarks?.first else {return}
+                self.createStudentLocationInfo(withPlacemark: placemark, locationTxt: locationTxt, linkTxt: linkTxt)
             }
+        }
+    }
+    
+    func createStudentLocationInfo(withPlacemark placemark:CLPlacemark, locationTxt:String, linkTxt:String){
+        // create and add a Custom LoadingView to indicate background activity
+        let loadingView = LoadingView(in: view)
+        view.addSubview(loadingView)
+        OTMClient.getUserInfo { [weak self](response, error) in
+            guard let self = self else {return}
+            // remove the loadingView when the app get a response from the server
+            loadingView.removeFromSuperview()
+            guard let response = response else{
+                self.presentOTMAlert(title: "Something went wrong", message: error!.localizedDescription)
+                return
+            }
+            
+            //get the coordinate of the placemark
+            guard let coordinate = placemark.location?.coordinate else {return}
+            // get the accountKey of the session
+            let myKey = OTMClient.Auth.accountKey
+            // create a custom StudentInfoPost that contain all the info necessary to make a POST request to the server
+            let myInfo = StudentInfoPost(uniqueKey: myKey, firstName: response.firstName, lastName: response.lastName, mapString: locationTxt, mediaURL: linkTxt, latitude: coordinate.latitude, longitude: coordinate.longitude)
+            // create a custom struct that holds the studentInfoPost and the placemark info to create an MKAnnotation
+            let studentLocationInfo = StudentLocationInfo(placemark: placemark, studentInfo: myInfo)
+            
+            self.performSegue(withIdentifier: "toSummitLocation", sender: studentLocationInfo)
+        
         }
     }
     

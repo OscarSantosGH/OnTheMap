@@ -15,16 +15,13 @@ class StudentsTableViewController: UIViewController {
     @IBOutlet weak var logoutButton: UIBarButtonItem!
     @IBOutlet weak var reloadButton: UIBarButtonItem!
     
-    var students = [StudentInformation]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.dataSource = self
         tableView.delegate = self
-        // get all the students from the appDelegate.students
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        students = appDelegate.students
+        
         // Set an observer that helps to reload the mapView annotations from another viewController
         NotificationCenter.default.addObserver(self, selector: #selector(reloadTableViewData), name: NSNotification.Name(rawValue: "ReloadData"), object: nil)
     }
@@ -57,7 +54,7 @@ class StudentsTableViewController: UIViewController {
         // get the id of the last location that the user post
         let objectId = OTMClient.Auth.postedLocationId
         // check for the user post in the students array
-        for student in students{
+        for student in OTMStudents.sharedInstance.students{
             // if the user post is found the overwriteLocation function will be called
             if student.objectId == objectId{
                 overwriteLocation()
@@ -92,11 +89,11 @@ extension StudentsTableViewController: UITableViewDataSource, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // In Swift 5.1 you can omit the keyword "return" when the function is a single expression
-        students.count
+        OTMStudents.sharedInstance.students.count
     }
     // configure all the cells
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let student = students[indexPath.row]
+        let student = OTMStudents.sharedInstance.students[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "studentCell")!
         cell.textLabel?.text = student.firstName
         cell.detailTextLabel?.text = student.mediaURL
@@ -105,7 +102,7 @@ extension StudentsTableViewController: UITableViewDataSource, UITableViewDelegat
     
     // handle touches in cells
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let student = students[indexPath.row]
+        let student = OTMStudents.sharedInstance.students[indexPath.row]
         guard let url = URL(string: student.mediaURL) else {
             return
         }

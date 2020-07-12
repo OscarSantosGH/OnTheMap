@@ -15,7 +15,6 @@ class MapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var reloadButton: UIBarButtonItem!
     
-    var students:[StudentInformation] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,10 +43,8 @@ class MapViewController: UIViewController {
                         self.mapView.removeAnnotation(annotation)
                     }
                 }
-                self.students = students
+                OTMStudents.sharedInstance.students = students
                 self.mapAnnotationConfig()
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                appDelegate.students = students
             }
         }
     }
@@ -57,7 +54,7 @@ class MapViewController: UIViewController {
         var annotations = [StudentMapAnnotation]()
         
         // getting all the info necessary to create a StudentMapAnnotation from each student
-        for student in students{
+        for student in OTMStudents.sharedInstance.students{
             let lat = CLLocationDegrees(student.latitude)
             let long = CLLocationDegrees(student.longitude)
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
@@ -82,7 +79,7 @@ class MapViewController: UIViewController {
         // get the id of the last location that the user post
         let objectId = OTMClient.Auth.postedLocationId
         // check for the user post in the students array
-        for student in students{
+        for student in OTMStudents.sharedInstance.students{
             // if the user post is found the overwriteLocation function will be called
             if student.objectId == objectId{
                 overwriteLocation()

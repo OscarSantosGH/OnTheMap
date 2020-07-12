@@ -33,7 +33,7 @@ class LoginViewController: UIViewController {
     @IBAction func signUpButtonPressed(_ sender: Any) {
         // present a SFSafariViewController with Udacity Sign Up webpage
         let safariViewController = SFSafariViewController(url: OTMClient.Endpoints.signUp.url)
-        self.present(safariViewController, animated: true)
+        present(safariViewController, animated: true)
     }
     
     func login(){
