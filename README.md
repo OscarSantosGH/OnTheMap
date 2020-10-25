@@ -26,5 +26,4 @@ Here you can see all the pins posted by others Udacity student in a maps view or
 Here you can add a location and a link to share with the other students. the app use **CLGeocoder** to get a location from the string.
 
 ![add location screen 1](https://github.com/OscarSantosGH/OnTheMap/blob/master/Images/addLocation1.jpg?raw=true "Add Location Screen 1")
-
 ![add location screen 2](https://github.com/OscarSantosGH/OnTheMap/blob/master/Images/addLocation2.jpg?raw=true "Add Location Screen 2")
