@@ -1,6 +1,6 @@
 #  On The Map
 
-This is a networked app that pull data from a [**Udacity**](https://www.udacity.com/) web service to create a map with pins representing student locations. Tapping a pin will display a custom URL posted by a student at that location.
+This is a networked app that pulls data from a [**Udacity**](https://www.udacity.com/) web service to create a map with pins representing student locations. Tapping a pin will display a custom URL posted by a student at that location.
 
 ## Usage
 
